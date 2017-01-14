@@ -40,6 +40,8 @@ class Bob(MagicRobot):
 
         rr_motor.reverseOutput(True)
         rf_motor.reverseOutput(True)
+        lr_motor.reverseOutput(True)
+        lf_motor.reverseOutput(True)
 
         self.stick = wpilib.Joystick(1)
 
@@ -53,10 +55,10 @@ class Bob(MagicRobot):
 
 
 
-                    # The robot does not have a gyro (yet) therefore the input is zero
-        self.robotDrive.mecanumDrive_Cartesian(self.stick.getX() / 0.5,
-                                               self.stick.getY() / 0.5,
-                                               self.stick.getZ() / 0.5 ,0);
+                    # The robot does not have a gyro (yeSt) therefore the input is zero
+        self.robotDrive.mecanumDrive_Cartesian(self.stick.getX() / 2,
+                                               self.stick.getY() / 2,
+                                               self.stick.getZ() / 2,0);
 
 
 
