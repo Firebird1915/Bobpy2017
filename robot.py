@@ -1,4 +1,5 @@
 import wpilib
+import ctre
 from magicbot import MagicRobot
 
 '''
@@ -14,6 +15,7 @@ from magicbot import MagicRobot
 #lowlevel components
 from components.drive import Drive
 
+VOLT_RAMPUP = 24/0.6
 
 class Bob(MagicRobot):
 
@@ -21,30 +23,40 @@ class Bob(MagicRobot):
 
     def createObjects(self):
         #Motors and such are set here
-        self.rf_motor = rf_motor = wpilib.Talon(1)
-        self.rr_motor = rr_motor = wpilib.Talon(2)
-        self.lf_motor = lf_motor = wpilib.Talon(3)
-        self.lr_motor = lr_motor = wpilib.Talon(4)
+        self.rf_motor = rf_motor = ctre.CANTalon(5)
+        self.rr_motor = rr_motor = ctre.CANTalon(1)
+        self.lf_motor = lf_motor = ctre.CANTalon(3)
+        self.lr_motor = lr_motor = ctre.CANTalon(4)
 
         self.robotDrive = wpilib.RobotDrive(rf_motor,
                                             rr_motor,
                                             lf_motor,
                                             lr_motor)
-        self.stick = wpilib.Joystick(0)
 
-    def teleopInit(self):
-        # optional might be useful later
-        pass
+        rf_motor.setVoltageRampRate(VOLT_RAMPUP)
+        rr_motor.setVoltageRampRate(VOLT_RAMPUP)
+        lf_motor.setVoltageRampRate(VOLT_RAMPUP)
+        lr_motor.setVoltageRampRate(VOLT_RAMPUP)
+
+        rr_motor.reverseOutput(True)
+        rf_motor.reverseOutput(True)
+
+        self.stick = wpilib.Joystick(1)
+
 
     def teleopPeriodic(self):
+
         '''Called on each iteration of the control loop'''
 
         self.robotDrive.setSafetyEnabled(True)
+      
 
-            # The robot does not have a gyro (yet) therefore the input is zero
-        self.robotDrive.mecanumDrive_Cartesian(self.stick.getX(),
-                                               self.stick.getY(),
-                                               self.stick.getZ(),0);
+
+
+                    # The robot does not have a gyro (yet) therefore the input is zero
+        self.robotDrive.mecanumDrive_Cartesian(self.stick.getX() / 0.5,
+                                               self.stick.getY() / 0.5,
+                                               self.stick.getZ() / 0.5 ,0);
 
 
 
