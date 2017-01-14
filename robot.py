@@ -41,13 +41,10 @@ class Bob(MagicRobot):
 
         self.robotDrive.setSafetyEnabled(True)
 
-        # While the robot is on
-        while self.isOperatorControl() and self.isEnabled():
-
             # The robot does not have a gyro (yet) therefore the input is zero
-            self.robotDrive.mecanumDrive_Cartesian(self.stick.getX(),
-                                                   self.stick.getY(),
-                                                   self.stick.getZ(),0);
+        self.robotDrive.mecanumDrive_Cartesian(self.stick.getX(),
+                                               self.stick.getY(),
+                                               self.stick.getZ(),0);
 
 
 
