@@ -1,6 +1,7 @@
 import wpilib
 import ctre
 from magicbot import MagicRobot
+from robotpy_ext.common_drivers.navx import AHRS
 
 '''
     Magic bot implimentation test
@@ -22,6 +23,9 @@ class Bob(MagicRobot):
     drive = Drive
 
     def createObjects(self):
+
+        self.sd = wpilib.SmartDashboard
+
         #Motors and such are set here
         self.rf_motor = rf_motor = ctre.CANTalon(5)
         self.rr_motor = rr_motor = ctre.CANTalon(1)
@@ -33,10 +37,10 @@ class Bob(MagicRobot):
                                             lf_motor,
                                             lr_motor)
 
-        rf_motor.setVoltageRampRate(VOLT_RAMPUP)
-        rr_motor.setVoltageRampRate(VOLT_RAMPUP)
-        lf_motor.setVoltageRampRate(VOLT_RAMPUP)
-        lr_motor.setVoltageRampRate(VOLT_RAMPUP)
+        # rf_motor.setVoltageRampRate(VOLT_RAMPUP)
+        # rr_motor.setVoltageRampRate(VOLT_RAMPUP)
+        # lf_motor.setVoltageRampRate(VOLT_RAMPUP)
+        # lr_motor.setVoltageRampRate(VOLT_RAMPUP)
 
         rr_motor.reverseOutput(True)
         rf_motor.reverseOutput(True)
@@ -45,21 +49,30 @@ class Bob(MagicRobot):
 
         self.stick = wpilib.Joystick(1)
 
+        self.ahrs = AHRS.create_spi()
+
+
 
     def teleopPeriodic(self):
 
         '''Called on each iteration of the control loop'''
 
+        tm = wpilib.Timer()
+        tm.start()
+
         self.robotDrive.setSafetyEnabled(True)
-      
+
+        if tm.hasPeriodPassed(1.0):
+            print("NavX Gyro", self.ahrs.getYaw(), self.ahrs.getAngle())      
 
 
 
                     # The robot does not have a gyro (yeSt) therefore the input is zero
         self.robotDrive.mecanumDrive_Cartesian(self.stick.getX() / 2,
                                                self.stick.getY() / 2,
-                                               self.stick.getZ() / 2,0);
+                                               self.stick.getZ() / 2,self.ahrs.getAngle());
 
+        wpilib.Timer.delay (0.005) #wait for the motor to update
 
 
 if __name__=='__main__':
