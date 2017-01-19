@@ -24,6 +24,7 @@ class Bob(MagicRobot):
 
     def createObjects(self):
 
+        #This lets you spit stuff to the dashboard
         self.sd = wpilib.SmartDashboard
 
         #Motors and such are set here
@@ -58,12 +59,13 @@ class Bob(MagicRobot):
         '''Called on each iteration of the control loop'''
 
         tm = wpilib.Timer()
+        tm.reset()
         tm.start()
 
         self.robotDrive.setSafetyEnabled(True)
 
         if tm.hasPeriodPassed(1.0):
-            print("NavX Gyro", self.ahrs.getYaw(), self.ahrs.getAngle())      
+            print("NavX Gyro", self.ahrs.getYaw(), self.ahrs.getAngle())
 
 
 
@@ -73,6 +75,21 @@ class Bob(MagicRobot):
                                                self.stick.getZ() / 2,self.ahrs.getAngle());
 
         wpilib.Timer.delay (0.005) #wait for the motor to update
+
+    def log(self):
+
+        self.logger.info("Entered disabled mode")
+        # I really just want to see what we can look at
+        self.tm.reset()
+        self.tm.start()
+
+        while self.isDisabled():
+            if self.timer.hasPeriodPassed(0.5):
+                self.sd.putBoolean('IsCalibrating', self.ahrs.isCalibrating())
+                self.sd.putBoolean('IsConneted',self.ahrs.isConnected())
+                self.sd.putNumber('Angle', self.ahrs.getAngle())
+
+            wpilib.Timer.delay(0.10)
 
 
 if __name__=='__main__':
