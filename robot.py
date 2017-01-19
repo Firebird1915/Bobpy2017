@@ -1,5 +1,7 @@
 import wpilib
 import ctre
+import logging
+from networktables import NetworkTable
 from magicbot import MagicRobot
 from robotpy_ext.common_drivers.navx import AHRS
 
@@ -58,21 +60,33 @@ class Bob(MagicRobot):
 
         '''Called on each iteration of the control loop'''
 
-        tm = wpilib.Timer()
-        tm.reset()
-        tm.start()
+
 
         self.robotDrive.setSafetyEnabled(True)
 
-        if tm.hasPeriodPassed(1.0):
-            print("NavX Gyro", self.ahrs.getYaw(), self.ahrs.getAngle())
+
+
+        self.sd.putBoolean('IsCalibrating', self.ahrs.isCalibrating())
+        self.sd.putBoolean('IsConneted',self.ahrs.isConnected())
+        self.sd.putNumber('Angle', self.ahrs.getAngle())
+
+        self.sd.putNumber("rr_motor", self.rr_motor.getOutputVoltage())
+        self.sd.putNumber("rf_motor", self.rf_motor.getOutputVoltage())
+        self.sd.putNumber("lr_motor", self.lr_motor.getOutputVoltage())
+        self.sd.putNumber("lf_motor", self.lf_motor.getOutputVoltage())
+
+        wpilib.Timer.delay(0.10)
+
+
+        print("NavX Gyro", self.ahrs.getYaw(), self.ahrs.getAngle())
 
 
 
                     # The robot does not have a gyro (yeSt) therefore the input is zero
         self.robotDrive.mecanumDrive_Cartesian(self.stick.getX() / 2,
-                                               self.stick.getY() / 2,
-                                               self.stick.getZ() / 2,self.ahrs.getAngle());
+                                               self.stick.getZ() / 2,
+                                               -self.stick.getY() / 2,self.ahrs.getAngle());
+
 
         wpilib.Timer.delay (0.005) #wait for the motor to update
 
