@@ -40,10 +40,11 @@ class Bob(MagicRobot):
                                             lf_motor,
                                             lr_motor)
 
-        # rf_motor.setVoltageRampRate(VOLT_RAMPUP)
-        # rr_motor.setVoltageRampRate(VOLT_RAMPUP)
-        # lf_motor.setVoltageRampRate(VOLT_RAMPUP)
-        # lr_motor.setVoltageRampRate(VOLT_RAMPUP)
+        rf_motor.setVoltageRampRate(VOLT_RAMPUP)
+        rr_motor.setVoltageRampRate(VOLT_RAMPUP)
+        lf_motor.setVoltageRampRate(VOLT_RAMPUP)
+        lr_motor.setVoltageRampRate(VOLT_RAMPUP)
+
 
         rr_motor.reverseOutput(True)
         rf_motor.reverseOutput(True)
@@ -55,6 +56,8 @@ class Bob(MagicRobot):
         self.ahrs = AHRS.create_spi()
 
 
+    def teleopInit(self):
+        self.ahrs.reset()
 
     def teleopPeriodic(self):
 
@@ -75,6 +78,7 @@ class Bob(MagicRobot):
         self.sd.putNumber("lr_motor", self.lr_motor.getOutputVoltage())
         self.sd.putNumber("lf_motor", self.lf_motor.getOutputVoltage())
 
+
         wpilib.Timer.delay(0.10)
 
 
@@ -83,10 +87,26 @@ class Bob(MagicRobot):
 
 
                     # The robot does not have a gyro (yeSt) therefore the input is zero
-        self.robotDrive.mecanumDrive_Cartesian(self.stick.getX() / 2,
-                                               self.stick.getZ() / 2,
-                                               -self.stick.getY() / 2,self.ahrs.getAngle());
+        #self.robotDrive.mecanumDrive_Cartesian(self.stick.getX() / 2,
+        #                                       self.stick.getZ() / 2,
+        #                                       -self.stick.getY() / 2,self.ahrs.getAngle())
 
+        # POVhorizontal = 0
+        # POVvertical = 0
+        #
+        # if self.stick.getPOV(pov=0) == 0:
+        #     POVvertical = .5
+        # if self.stick.getPOV(pov=0) == 180:
+        #     POVvertical = -.5
+        # if self.stick.getPOV(pov=0) == 90:
+        #     POVhorizontal = .5
+        # if self.stick.getPOV(pov=0) == 270:
+        #     POVhorizontal = -.5
+
+        self.robotDrive.mecanumDrive_Cartesian(self.stick.getRawAxis(0),
+                                               self.stick.getRawAxis(3),
+                                               -self.stick.getRawAxis(1),
+                                               self.ahrs.getAngle())
 
         wpilib.Timer.delay (0.005) #wait for the motor to update
 
