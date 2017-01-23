@@ -3,7 +3,7 @@ import ctre
 import logging
 from networktables import NetworkTable
 from magicbot import MagicRobot
-from robotpy_ext.common_drivers.navx import AHRS
+from robotpy_ext.common_drivers import navx
 
 '''
     Magic bot implimentation test
@@ -53,11 +53,11 @@ class Bob(MagicRobot):
 
         self.stick = wpilib.Joystick(1)
 
-        self.ahrs = AHRS.create_spi()
+        self.navX = navx.AHRS.create_spi()
 
 
     def teleopInit(self):
-        self.ahrs.reset()
+        self.navX.reset()
 
     def teleopPeriodic(self):
 
@@ -69,61 +69,21 @@ class Bob(MagicRobot):
 
 
 
-        self.sd.putBoolean('IsCalibrating', self.ahrs.isCalibrating())
-        self.sd.putBoolean('IsConneted',self.ahrs.isConnected())
-        self.sd.putNumber('Angle', self.ahrs.getAngle())
 
-        self.sd.putNumber("rr_motor", self.rr_motor.getOutputVoltage())
-        self.sd.putNumber("rf_motor", self.rf_motor.getOutputVoltage())
-        self.sd.putNumber("lr_motor", self.lr_motor.getOutputVoltage())
-        self.sd.putNumber("lf_motor", self.lf_motor.getOutputVoltage())
 
 
         wpilib.Timer.delay(0.10)
 
 
-        print("NavX Gyro", self.ahrs.getYaw(), self.ahrs.getAngle())
 
 
-
-                    # The robot does not have a gyro (yeSt) therefore the input is zero
-        #self.robotDrive.mecanumDrive_Cartesian(self.stick.getX() / 2,
-        #                                       self.stick.getZ() / 2,
-        #                                       -self.stick.getY() / 2,self.ahrs.getAngle())
-
-        # POVhorizontal = 0
-        # POVvertical = 0
-        #
-        # if self.stick.getPOV(pov=0) == 0:
-        #     POVvertical = .5
-        # if self.stick.getPOV(pov=0) == 180:
-        #     POVvertical = -.5
-        # if self.stick.getPOV(pov=0) == 90:
-        #     POVhorizontal = .5
-        # if self.stick.getPOV(pov=0) == 270:
-        #     POVhorizontal = -.5
-
-        self.robotDrive.mecanumDrive_Cartesian(self.stick.getRawAxis(0),
-                                               self.stick.getRawAxis(3),
-                                               -self.stick.getRawAxis(1),
-                                               self.ahrs.getAngle())
+        self.drive.move(self.stick.getRawAxis(0),
+                        self.stick.getRawAxis(3),
+                        -self.stick.getRawAxis(1),
+                        self.navX.getAngle())
 
         wpilib.Timer.delay (0.005) #wait for the motor to update
 
-    def log(self):
-
-        self.logger.info("Entered disabled mode")
-        # I really just want to see what we can look at
-        self.tm.reset()
-        self.tm.start()
-
-        while self.isDisabled():
-            if self.timer.hasPeriodPassed(0.5):
-                self.sd.putBoolean('IsCalibrating', self.ahrs.isCalibrating())
-                self.sd.putBoolean('IsConneted',self.ahrs.isConnected())
-                self.sd.putNumber('Angle', self.ahrs.getAngle())
-
-            wpilib.Timer.delay(0.10)
 
 
 if __name__=='__main__':
