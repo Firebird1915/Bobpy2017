@@ -1,7 +1,6 @@
 import wpilib
 import ctre
 import logging
-from networktables import NetworkTable
 from magicbot import MagicRobot
 from robotpy_ext.common_drivers import navx
 
@@ -30,10 +29,10 @@ class Bob(MagicRobot):
         self.sd = wpilib.SmartDashboard
 
         #Motors and such are set here
-        self.rf_motor = rf_motor = ctre.CANTalon(5)
-        self.rr_motor = rr_motor = ctre.CANTalon(1)
-        self.lf_motor = lf_motor = ctre.CANTalon(3)
-        self.lr_motor = lr_motor = ctre.CANTalon(4)
+        self.rf_motor = rf_motor = ctre.CANTalon(4)
+        self.rr_motor = rr_motor = ctre.CANTalon(3)
+        self.lf_motor = lf_motor = ctre.CANTalon(5)
+        self.lr_motor = lr_motor = ctre.CANTalon(1)
 
         self.robotDrive = wpilib.RobotDrive(rf_motor,
                                             rr_motor,
@@ -67,15 +66,7 @@ class Bob(MagicRobot):
 
         self.robotDrive.setSafetyEnabled(True)
 
-
-
-
-
-
         wpilib.Timer.delay(0.10)
-
-
-
 
         self.drive.move(self.stick.getRawAxis(0),
                         self.stick.getRawAxis(3),

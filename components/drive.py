@@ -18,16 +18,16 @@ class Drive:
     navX = navx.AHRS
 
     def __init__(self):
-        self.x = 0
-        self.y = 0
-        self.z = 0
-
-
-    def move(self, x, y, z, angle,):
+        # self.x = 0
+        # self.y = 0
+        # self.z = 0
+        pass
+        
+    def move(self, x, y, z, angle):
         '''
         Move the robot
         '''
-        self.robotDrive.mecanumDrive_Cartesian(self.x,self.y,self.z, angle)
+        self.robotDrive.mecanumDrive_Cartesian(x,y,z, angle)
 
     def log(self):
 
