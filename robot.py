@@ -8,8 +8,7 @@ from robotpy_ext.common_drivers import navx
     Magic bot implimentation test
     Things (obviously) are subject to change
 
-    1/13: Because this is a test components are made simply for understanding
-    but do nothing.
+    1/27: Using magicbot as main framework this season.
 '''
 
 #Highlevel components before lowlevel components
