@@ -22,11 +22,15 @@ class Drive:
         # self.y = 0
         # self.z = 0
         pass
-        
-    def move(self, x, y, z, angle):
+
+    def move(self, x, y, z, angle, Tuner=False):
         '''
         Move the robot
         '''
+        if Tuner == True:
+            x = x / 0.5
+            y = y / 0.5
+            z = z / 0.5
         self.robotDrive.mecanumDrive_Cartesian(x,y,z, angle)
 
     def log(self):

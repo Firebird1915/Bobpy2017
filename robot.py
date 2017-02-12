@@ -18,6 +18,7 @@ from robotpy_ext.common_drivers import navx
 from components.drive import Drive
 
 VOLT_RAMPUP = 24/0.6
+MAX_VOLT = 0.05
 
 class Bob(MagicRobot):
 
@@ -38,6 +39,13 @@ class Bob(MagicRobot):
                                             rr_motor,
                                             lf_motor,
                                             lr_motor)
+
+
+        rf_motor.configMaxOutputVoltage(MAX_VOLT)
+        rr_motor.configMaxOutputVoltage(MAX_VOLT)
+        lf_motor.configMaxOutputVoltage(MAX_VOLT)
+        lr_motor.configMaxOutputVoltage(MAX_VOLT)
+
 
         rf_motor.setVoltageRampRate(VOLT_RAMPUP)
         rr_motor.setVoltageRampRate(VOLT_RAMPUP)
@@ -71,11 +79,13 @@ class Bob(MagicRobot):
         self.drive.move(self.stick.getRawAxis(0),
                         self.stick.getRawAxis(3),
                         -self.stick.getRawAxis(1),
-                        self.navX.getAngle())
+                        self.navX.getAngle(), Tuner=True)
 
         wpilib.Timer.delay (0.005) #wait for the motor to update
 
 
+    def log(self):
+        self.drive.log(self)
 
 if __name__=='__main__':
     wpilib.run(Bob)
