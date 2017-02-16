@@ -5,10 +5,11 @@ from magicbot import MagicRobot
 from robotpy_ext.common_drivers import navx
 
 '''
-    Magic bot implimentation test
+    Magic bot implimentation
     Things (obviously) are subject to change
 
     1/27: Using magicbot as main framework this season.
+    2/16: drivetrain is a bit more refine.
 '''
 
 #Highlevel components before lowlevel components
@@ -45,24 +46,27 @@ class Bob(MagicRobot):
         lf_motor.configMaxOutputVoltage(MAX_VOLT)
         lr_motor.configMaxOutputVoltage(MAX_VOLT)
 
-
+        #Prevents the robot from jolting to full power
         rf_motor.setVoltageRampRate(VOLT_RAMPUP)
         rr_motor.setVoltageRampRate(VOLT_RAMPUP)
         lf_motor.setVoltageRampRate(VOLT_RAMPUP)
         lr_motor.setVoltageRampRate(VOLT_RAMPUP)
 
-
+        #makes the motors turn in the correct direction
         rr_motor.reverseOutput(True)
         rf_motor.reverseOutput(True)
         lr_motor.reverseOutput(True)
         lf_motor.reverseOutput(True)
 
-        self.stick = wpilib.Joystick(1)
+        self.stick = wpilib.Joystick(1) #ps2 controller
+        self.stick2 = wpilib.Joystick(2) #logitech joystick
 
+        #Navx Gyro (The purple board on the rio)
         self.navX = navx.AHRS.create_spi()
 
 
     def teleopInit(self):
+        #reset the gyro
         self.navX.reset()
 
     def teleopPeriodic(self):
@@ -78,7 +82,7 @@ class Bob(MagicRobot):
         self.drive.move(self.stick.getRawAxis(0),
                         self.stick.getRawAxis(3),
                         -self.stick.getRawAxis(1),
-                        self.navX.getAngle(), Tuner=True)
+                        self.navX.getAngle(), squared=True)
 
         wpilib.Timer.delay (0.005) #wait for the motor to update
 
