@@ -1,6 +1,5 @@
 import wpilib
 from robotpy_ext.common_drivers import navx
-#would import high component here
 
 class Drive:
     """
@@ -16,7 +15,7 @@ class Drive:
     """
 
 
-    #refrence our drivetrain and gyro robot.py file
+    #refrence our drivetrain and gyro via robot.py file
     robotDrive = wpilib.RobotDrive
     navX = navx.AHRS
 

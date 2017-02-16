@@ -17,8 +17,8 @@ from robotpy_ext.common_drivers import navx
 #lowlevel components
 from components.drive import Drive
 
-VOLT_RAMPUP = 24/0.6
-MAX_VOLT = 0.05
+VOLT_RAMPUP = 24/0.3
+#MAX_VOLT = 0.05
 
 class Bob(MagicRobot):
 
@@ -29,34 +29,50 @@ class Bob(MagicRobot):
         #This lets you spit stuff to the dashboard
         self.sd = wpilib.SmartDashboard
 
+        #Spark relay for lift queue
+        self.lift_mount = wpilib.Relay(1)
+
+        # #Basically turn the compressor on at startup
+        # robot = robot
+        # if robot.isReal():
+        #     self.compressor = wpilib.Compressor()
+        #     self.compressor.start()
+
+
+        self.ball_dump = wpilib.DoubleSolenoid(0,1)
+        self.lift_motor = ctre.CANTalon(5)
+
         #Motors and such are set here
-        self.rf_motor = rf_motor = ctre.CANTalon(4)
-        self.rr_motor = rr_motor = ctre.CANTalon(3)
-        self.lf_motor = lf_motor = ctre.CANTalon(5)
-        self.lr_motor = lr_motor = ctre.CANTalon(1)
-
-        self.robotDrive = wpilib.RobotDrive(rf_motor,
-                                            rr_motor,
-                                            lf_motor,
-                                            lr_motor)
+        self.rf_motor = ctre.CANTalon(4)
+        self.rr_motor = ctre.CANTalon(3)
+        self.lf_motor = ctre.CANTalon(2)
+        self.lr_motor = ctre.CANTalon(1)
 
 
-        rf_motor.configMaxOutputVoltage(MAX_VOLT)
-        rr_motor.configMaxOutputVoltage(MAX_VOLT)
-        lf_motor.configMaxOutputVoltage(MAX_VOLT)
-        lr_motor.configMaxOutputVoltage(MAX_VOLT)
+        self.robotDrive = wpilib.RobotDrive(self.rf_motor,
+                                            self.rr_motor,
+                                            self.lf_motor,
+                                            self.lr_motor)
+
+
+
+
+        #self.rf_motor.configMaxOutputVoltage(MAX_VOLT)
+        #self.rr_motor.configMaxOutputVoltage(MAX_VOLT)
+        #self.lf_motor.configMaxOutputVoltage(MAX_VOLT)
+        #self.lr_motor.configMaxOutputVoltage(MAX_VOLT)
 
         #Prevents the robot from jolting to full power
-        rf_motor.setVoltageRampRate(VOLT_RAMPUP)
-        rr_motor.setVoltageRampRate(VOLT_RAMPUP)
-        lf_motor.setVoltageRampRate(VOLT_RAMPUP)
-        lr_motor.setVoltageRampRate(VOLT_RAMPUP)
+        self.rf_motor.setVoltageRampRate(VOLT_RAMPUP)
+        self.rr_motor.setVoltageRampRate(VOLT_RAMPUP)
+        self.lf_motor.setVoltageRampRate(VOLT_RAMPUP)
+        self.lr_motor.setVoltageRampRate(VOLT_RAMPUP)
 
         #makes the motors turn in the correct direction
-        rr_motor.reverseOutput(True)
-        rf_motor.reverseOutput(True)
-        lr_motor.reverseOutput(True)
-        lf_motor.reverseOutput(True)
+        self.rr_motor.reverseOutput(True)
+        self.rf_motor.reverseOutput(True)
+        self.lr_motor.reverseOutput(True)
+        self.lf_motor.reverseOutput(True)
 
         self.stick = wpilib.Joystick(1) #ps2 controller
         self.stick2 = wpilib.Joystick(2) #logitech joystick
