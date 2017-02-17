@@ -16,37 +16,29 @@ from robotpy_ext.common_drivers import navx
 
 #lowlevel components
 from components.drive import Drive
+from components.lift import Lift
 
-VOLT_RAMPUP = 24/0.3
-#MAX_VOLT = 0.05
+VOLT_RAMPUP = 24/1
+MAX_VOLT = 0.5
 
 class Bob(MagicRobot):
 
     drive = Drive
+    lift = Lift
 
     def createObjects(self):
 
         #This lets you spit stuff to the dashboard
         self.sd = wpilib.SmartDashboard
 
-        #Spark relay for lift queue
-        self.lift_mount = wpilib.Relay(1)
-
-        # #Basically turn the compressor on at startup
-        # robot = robot
-        # if robot.isReal():
-        #     self.compressor = wpilib.Compressor()
-        #     self.compressor.start()
-
-
-        self.ball_dump = wpilib.DoubleSolenoid(0,1)
-        self.lift_motor = ctre.CANTalon(5)
-
         #Motors and such are set here
-        self.rf_motor = ctre.CANTalon(4)
-        self.rr_motor = ctre.CANTalon(3)
-        self.lf_motor = ctre.CANTalon(2)
-        self.lr_motor = ctre.CANTalon(1)
+        self.rf_motor = ctre.CANTalon(5)
+        self.rr_motor = ctre.CANTalon(6)
+        self.lf_motor = ctre.CANTalon(1)
+        self.lr_motor = ctre.CANTalon(2)
+
+        #Lift
+        self.lift_motor = ctre.CANTalon(3)
 
 
         self.robotDrive = wpilib.RobotDrive(self.rf_motor,
@@ -55,12 +47,10 @@ class Bob(MagicRobot):
                                             self.lr_motor)
 
 
-
-
-        #self.rf_motor.configMaxOutputVoltage(MAX_VOLT)
-        #self.rr_motor.configMaxOutputVoltage(MAX_VOLT)
-        #self.lf_motor.configMaxOutputVoltage(MAX_VOLT)
-        #self.lr_motor.configMaxOutputVoltage(MAX_VOLT)
+        self.rf_motor.configMaxOutputVoltage(MAX_VOLT)
+        self.rr_motor.configMaxOutputVoltage(MAX_VOLT)
+        self.lf_motor.configMaxOutputVoltage(MAX_VOLT)
+        self.lr_motor.configMaxOutputVoltage(MAX_VOLT)
 
         #Prevents the robot from jolting to full power
         self.rf_motor.setVoltageRampRate(VOLT_RAMPUP)
@@ -96,9 +86,18 @@ class Bob(MagicRobot):
         wpilib.Timer.delay(0.10)
 
         self.drive.move(self.stick.getRawAxis(0),
-                        self.stick.getRawAxis(3),
+                        self.stick.getRawAxis(2),
                         -self.stick.getRawAxis(1),
-                        self.navX.getAngle(), squared=True)
+                        self.navX.getAngle(), squared=False)
+
+        if self.stick.getRawButton(4):
+            self.lift.goUp(self.stick.getRawButton(4))
+        elif self.stick.getRawButton(1):
+            self.lift.goUp(self.stick.getRawButton(1) * .5)
+        elif self.stick.getRawButton(2):
+            self.lift.goUp(self.stick.getRawButton(2) * -1)
+        else:
+            self.lift.goUp(self.stick.getRawButton(3) * -.5)
 
         wpilib.Timer.delay (0.005) #wait for the motor to update
 
