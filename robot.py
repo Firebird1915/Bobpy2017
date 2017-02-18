@@ -17,6 +17,7 @@ from robotpy_ext.common_drivers import navx
 #lowlevel components
 from components.drive import Drive
 from components.lift import Lift
+from components.dump import Dump
 
 VOLT_RAMPUP = 24/1
 MAX_VOLT = 0.5
@@ -25,6 +26,7 @@ class Bob(MagicRobot):
 
     drive = Drive
     lift = Lift
+    dump = Dump
 
     def createObjects(self):
 
@@ -64,6 +66,8 @@ class Bob(MagicRobot):
         self.lr_motor.reverseOutput(True)
         self.lf_motor.reverseOutput(True)
 
+        self.doubleS = wpilib.DoubleSolenoid(0,1)
+
         self.stick = wpilib.Joystick(1) #ps2 controller
         self.stick2 = wpilib.Joystick(2) #logitech joystick
 
@@ -74,6 +78,7 @@ class Bob(MagicRobot):
     def teleopInit(self):
         #reset the gyro
         self.navX.reset()
+        self.doubleS.set(2)
 
     def teleopPeriodic(self):
 
@@ -88,7 +93,7 @@ class Bob(MagicRobot):
         self.drive.move(self.stick.getRawAxis(0),
                         self.stick.getRawAxis(2),
                         -self.stick.getRawAxis(1),
-                        self.navX.getAngle(), squared=False)
+                        self.navX.getAngle(), False)
 
         if self.stick.getRawButton(4):
             self.lift.goUp(self.stick.getRawButton(4))
@@ -98,6 +103,9 @@ class Bob(MagicRobot):
             self.lift.goUp(self.stick.getRawButton(2) * -1)
         else:
             self.lift.goUp(self.stick.getRawButton(3) * -.5)
+
+        if self.stick.getRawButton(8):
+            self.dump.toggle()
 
         wpilib.Timer.delay (0.005) #wait for the motor to update
 

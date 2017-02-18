@@ -22,7 +22,7 @@ class Drive:
     def __init__(self):
         pass
 
-    def move(self, x, y, z, angle, squared=False):
+    def move(self, x, y, z, angle, squared):
         '''
         Move the robot
 
@@ -30,13 +30,13 @@ class Drive:
         '''
         if squared:
             if x >= 0.0:
-                x = (x * x)
+                x *= x
             else:
-                x = -(x * x)
+                x = -(x**2)
             if y >= 0.0:
-                y = (x * x)
+                y *= y
             else:
-                 y = -(x * x)
+                 y = -(y**2)
 
         self.robotDrive.mecanumDrive_Cartesian(x,y,z, angle)
 
