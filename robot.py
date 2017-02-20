@@ -3,6 +3,7 @@ import ctre
 import logging
 from magicbot import MagicRobot
 from robotpy_ext.common_drivers import navx
+from robotpy_ext.control.button_debouncer import ButtonDebouncer
 
 '''
     Magic bot implimentation
@@ -71,29 +72,40 @@ class Bob(MagicRobot):
         self.stick = wpilib.Joystick(1) #ps2 controller
         self.stick2 = wpilib.Joystick(2) #logitech joystick
 
+        self.dumperButton = ButtonDebouncer(self.stick, 8)
+        self.loaderButton = ButtonDebouncer(self.stick, 6)
+
+        self.compressor = wpilib.Compressor()
+
         #Navx Gyro (The purple board on the rio)
         self.navX = navx.AHRS.create_spi()
-
+        self.robot = True
 
     def teleopInit(self):
         #reset the gyro
         self.navX.reset()
-        self.doubleS.set(2)
+
 
     def teleopPeriodic(self):
 
         '''Called on each iteration of the control loop'''
 
 
+        if self.robot == True:
+            self.compressor.start()
 
         self.robotDrive.setSafetyEnabled(True)
 
         wpilib.Timer.delay(0.10)
 
-        self.drive.move(self.stick.getRawAxis(0),
-                        self.stick.getRawAxis(2),
-                        -self.stick.getRawAxis(1),
-                        self.navX.getAngle(), False)
+        try:
+            self.drive.move(self.stick.getRawAxis(0),
+                            self.stick.getRawAxis(2),
+                            -self.stick.getRawAxis(1),
+                            self.navX.getAngle(), False)
+        except:
+            if not self.isFmsAttached():
+                raise
 
         if self.stick.getRawButton(4):
             self.lift.goUp(self.stick.getRawButton(4))
@@ -104,9 +116,10 @@ class Bob(MagicRobot):
         else:
             self.lift.goUp(self.stick.getRawButton(3) * -.5)
 
-        if self.stick.getRawButton(8):
-            self.dump.toggle()
-
+        if self.dumperButton.get():
+            self.dump.dumper()
+        elif self.loaderButton.get():
+            self.dump.loader()
         wpilib.Timer.delay (0.005) #wait for the motor to update
 
 

@@ -38,7 +38,7 @@ class Drive:
             else:
                  y = -(y**2)
 
-        self.robotDrive.mecanumDrive_Cartesian(x,y,z, angle)
+        self.robotDrive.mecanumDrive_Cartesian(x / 1.2, y / 1.2, z / 1.2, angle)
 
     def log(self):
 
