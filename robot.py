@@ -68,6 +68,7 @@ class Bob(MagicRobot):
         self.lf_motor.reverseOutput(True)
 
         self.doubleS = wpilib.DoubleSolenoid(0,1)
+        self.doubleS2 = wpilib.DoubleSolenoid(2,3)
 
         self.stick = wpilib.Joystick(1) #ps2 controller
         self.stick2 = wpilib.Joystick(2) #logitech joystick
@@ -120,6 +121,10 @@ class Bob(MagicRobot):
             self.dump.dumper()
         elif self.loaderButton.get():
             self.dump.loader()
+
+        if self.stick.getRawButton(7):
+            self.dump.toggle()
+            
         wpilib.Timer.delay (0.005) #wait for the motor to update
 
 
