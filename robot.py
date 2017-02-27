@@ -85,6 +85,7 @@ class Bob(MagicRobot):
     def teleopInit(self):
         #reset the gyro
         self.navX.reset()
+        wpilib.CameraServer.launch('vision.py:main')
 
 
     def teleopPeriodic(self):
@@ -124,7 +125,7 @@ class Bob(MagicRobot):
 
         if self.stick.getRawButton(7):
             self.dump.toggle()
-            
+
         wpilib.Timer.delay (0.005) #wait for the motor to update
 
 
