@@ -82,10 +82,11 @@ class Bob(MagicRobot):
         self.navX = navx.AHRS.create_spi()
         self.robot = True
 
+        self.cam = wpilib.CameraServer.launch('vision.py:main')
+
     def teleopInit(self):
         #reset the gyro
         self.navX.reset()
-        wpilib.CameraServer.launch('vision.py:main')
 
 
     def teleopPeriodic(self):
