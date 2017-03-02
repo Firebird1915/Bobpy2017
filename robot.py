@@ -88,7 +88,6 @@ class Bob(MagicRobot):
         self.navX.reset()
 
 
-
     def teleopPeriodic(self):
 
         '''Called on each iteration of the control loop'''
