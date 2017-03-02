@@ -31,6 +31,7 @@ class Bob(MagicRobot):
 
     def createObjects(self):
 
+        wpilib.CameraServer.launch('vision.py:main')
         #This lets you spit stuff to the dashboard
         self.sd = wpilib.SmartDashboard
 
@@ -85,7 +86,7 @@ class Bob(MagicRobot):
     def teleopInit(self):
         #reset the gyro
         self.navX.reset()
-        wpilib.CameraServer.launch('vision.py:main')
+
 
 
     def teleopPeriodic(self):

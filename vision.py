@@ -1,4 +1,4 @@
-from cscore import cs
+from cscore import CameraServer, UsbCamera
 
 """
 nxn
@@ -9,8 +9,17 @@ def main():
 
     #setup our first camera with settings that won't blow up the RIO
 
-    camera1 = cs.startAutomaticCapture(dev=0) #where the camera is plugged in via usb
-    camera1.setVideoMode(cs.VideoMode.PixelFormat.kMJPEG, 320, 240, 20)
+    usb1 = cs.startAutomaticCapture(dev=0) #where the camera is plugged in via usb
+    usb1.setVideoMode(cs.VideoMode.PixelFormat.kMJPEG, 320, 240, 20)
+
+    usb2 = cs.startAutomaticCapture(dev=1)
+    usb2.setVideoMode(cs.VideoMode.PixelFormat.kMJPEG, 320, 340, 20)
+
+    cs.waitForever()
 
 
-    cs.waitForever() #self explanatory
+if __name__ = '__main__':
+    import networktables
+    networktables.initialize(server='10.19.15.2')
+
+    main()
