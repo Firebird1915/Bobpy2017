@@ -40,6 +40,10 @@ class Drive:
 
         self.robotDrive.mecanumDrive_Cartesian(x / 1.2, y / 1.2, z / 1.2, angle)
 
+    def arcade(self, x,y):
+        self.robotDrive.arcadeDrive(x,y)
+
+
     def log(self):
 
         #Spit out some data about the gyro

@@ -1,8 +1,9 @@
-from robotpy_ext.autonomous import StatefulAutonomos, timed_state
+from magicbot import AutonomousStateMachine, timed_state
 
-from components.drive import Drive
+from robotpy_ext.autonomous import *
+from components import drive
 
-class MoveForward(StatefulAutonomos):
+class MoveForward(StatefulAutonomous):
 
     '''
     In StatefulAutonomos the robot will execute a series of events
@@ -16,7 +17,7 @@ class MoveForward(StatefulAutonomos):
     MODE_NAME = 'Move Forward'
     Default = False
 
-    drive=Drive
+    drive = drive.Drive
 
     def initialize(self):
         #here we can asign variables for the dashboard
@@ -26,4 +27,8 @@ class MoveForward(StatefulAutonomos):
 
     @timed_state(duration=1,first=True)
     def go_foward(self):
-        drive.move(1,0,0,0)
+        try:
+            drive.arcade(1,0)
+        except:
+            if not self.isFmsAttached():
+                raise

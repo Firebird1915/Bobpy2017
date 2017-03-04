@@ -1,9 +1,10 @@
 import wpilib
 import ctre
 import logging
-from magicbot import MagicRobot
+from magicbot import MagicRobot, AutonomousStateMachine
 from robotpy_ext.common_drivers import navx
 from robotpy_ext.control.button_debouncer import ButtonDebouncer
+from wpilib.smartdashboard import SmartDashboard
 
 '''
     Magic bot implimentation
@@ -82,6 +83,7 @@ class Bob(MagicRobot):
         #Navx Gyro (The purple board on the rio)
         self.navX = navx.AHRS.create_spi()
         self.robot = True
+
 
     def teleopInit(self):
         #reset the gyro
