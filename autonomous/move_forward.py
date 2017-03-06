@@ -1,6 +1,4 @@
-from magicbot import AutonomousStateMachine, timed_state
-
-from robotpy_ext.autonomous import *
+from robotpy_ext.autonomous import StatefulAutonomous, timed_state
 from components import drive
 
 class MoveForward(StatefulAutonomous):
@@ -25,10 +23,13 @@ class MoveForward(StatefulAutonomous):
 
 
 
-    @timed_state(duration=1,first=True)
+    @timed_state(duration=1,next_state='stop', first=True)
     def go_foward(self):
         try:
-            drive.arcade(1,0)
+            self.drive.arcade(0,0.25)
         except:
             if not self.isFmsAttached():
                 raise
+    @timed_state(duration=5)
+    def stop(self):
+        self.drive.arcade(0,0)

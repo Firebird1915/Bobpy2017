@@ -1,7 +1,7 @@
 import wpilib
 import ctre
 import logging
-from magicbot import MagicRobot, AutonomousStateMachine
+from magicbot import MagicRobot
 from robotpy_ext.common_drivers import navx
 from robotpy_ext.control.button_debouncer import ButtonDebouncer
 from wpilib.smartdashboard import SmartDashboard
