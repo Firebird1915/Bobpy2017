@@ -89,6 +89,8 @@ class Bob(MagicRobot):
         #reset the gyro
         self.navX.reset()
 
+    def autonomous(self):
+        MagicRobot.autonomous(self)
 
     def teleopPeriodic(self):
 

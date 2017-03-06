@@ -1,7 +1,8 @@
 from robotpy_ext.autonomous import StatefulAutonomous, timed_state
 from components import drive
 
-class MoveForward(StatefulAutonomous):
+from magicbot import AutonomousStateMachine, tunable, timed_state
+class MoveForward(AutonomousStateMachine):
 
     '''
     In StatefulAutonomos the robot will execute a series of events
@@ -23,7 +24,7 @@ class MoveForward(StatefulAutonomous):
 
 
 
-    @timed_state(duration=1,next_state='stop', first=True)
+    @timed_state(duration=3,next_state='stop', first=True)
     def go_foward(self):
         try:
             self.drive.arcade(0,0.25)
