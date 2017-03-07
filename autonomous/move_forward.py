@@ -27,7 +27,7 @@ class MoveForward(AutonomousStateMachine):
     @timed_state(duration=3,next_state='stop', first=True)
     def go_foward(self):
         try:
-            self.drive.arcade(0,0.25)
+            self.drive.arcade(0.5, 0)
         except:
             if not self.isFmsAttached():
                 raise

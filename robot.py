@@ -37,10 +37,10 @@ class Bob(MagicRobot):
         self.sd = wpilib.SmartDashboard
 
         #Motors and such are set here
-        self.rf_motor = ctre.CANTalon(5)
-        self.rr_motor = ctre.CANTalon(6)
-        self.lf_motor = ctre.CANTalon(2)
-        self.lr_motor = ctre.CANTalon(1)
+        self.rf_motor = ctre.CANTalon(5)#5
+        self.rr_motor = ctre.CANTalon(6)#6
+        self.lf_motor = ctre.CANTalon(2)#2
+        self.lr_motor = ctre.CANTalon(1)#1
 
         #Lift
         self.lift_motor = ctre.CANTalon(3)
