@@ -40,7 +40,7 @@ class Bob(MagicRobot):
         self.rf_motor = ctre.CANTalon(5)#5
         self.rr_motor = ctre.CANTalon(6)#6
         self.lf_motor = ctre.CANTalon(2)#2
-        self.lr_motor = ctre.CANTalon(1)#1
+        self.lr_motor = ctre.CANTalon(1)
 
         #Lift
         self.lift_motor = ctre.CANTalon(3)
@@ -127,8 +127,15 @@ class Bob(MagicRobot):
         elif self.loaderButton.get():
             self.dump.loader()
 
+        #Moves robot back aprox. 6 in. for gear loading
         if self.stick.getRawButton(7):
-            self.dump.toggle()
+            try:
+                for i in range(3):
+                    self.drive.move(0, 0, -.25, self.navX.getAngle(), False)
+                    wpilib.Timer.delay(.1)
+            except:
+                if not self.isFmsAttached():
+                    raise
 
         wpilib.Timer.delay (0.005) #wait for the motor to update
 
