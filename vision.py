@@ -9,9 +9,7 @@ def main():
     cs.enableLogging()
 
     usb1 = cs.startAutomaticCapture(dev=0)
-    usb1.setVideoMode(cs.VideoMode.PixelFormat.kMJPEG, 320, 240, 20)
 
     usb2 = cs.startAutomaticCapture(dev=1)
-    usb2.setVideoMode(cs.VideoMode.PixelFormat.kMJPEG, 320, 240, 20)
 
     cs.waitForever()

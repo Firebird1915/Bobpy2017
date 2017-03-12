@@ -104,6 +104,10 @@ class Bob(MagicRobot):
 
         wpilib.Timer.delay(0.10)
 
+        """
+        /////Ps3 Controls/////
+        """
+
         try:
             self.drive.move(self.stick.getRawAxis(0),
                             self.stick.getRawAxis(2),
@@ -113,22 +117,23 @@ class Bob(MagicRobot):
             if not self.isFmsAttached():
                 raise
 
-        if self.stick.getRawButton(4):
-            self.lift.goUp(self.stick.getRawButton(4))
-        elif self.stick.getRawButton(1):
-            self.lift.goUp(self.stick.getRawButton(1) * .5)
-        elif self.stick.getRawButton(2):
-            self.lift.goUp(self.stick.getRawButton(2) * -1)
-        else:
-            self.lift.goUp(self.stick.getRawButton(3) * -.5)
+        # if self.stick.getRawButton(4):
+        #     self.lift.goUp(self.stick.getRawButton(4))
+        # elif self.stick.getRawButton(1):
+        #     self.lift.goUp(self.stick.getRawButton(1) * .5)
+        # elif self.stick.getRawButton(2):
+        #     self.lift.goUp(self.stick.getRawButton(2) * -1)
+        # else:
+        #     self.lift.goUp(self.stick.getRawButton(3) * -.5)
 
-        if self.dumperButton.get():
-            self.dump.dumper()
-        elif self.loaderButton.get():
-            self.dump.loader()
+        # if self.dumperButton.get():
+        #     self.dump.dumper()
+        # elif self.loaderButton.get():
+        #     self.dump.loader()
+
 
         #Moves robot back aprox. 6 in. for gear loading
-        if self.stick.getRawButton(7):
+        if self.stick.getRawButton(7) or self.stick.getRawButton(8):
             try:
                 for i in range(3):
                     self.drive.move(0, 0, -.25, self.navX.getAngle(), False)
@@ -136,6 +141,16 @@ class Bob(MagicRobot):
             except:
                 if not self.isFmsAttached():
                     raise
+
+        """
+        ////logitech Controls////
+        """
+        self.lift.goUp(self.stick2.getRawAxis(1))
+
+        if self.stick2.getRawButton(1):
+            self.dump.dumper()
+        elif self.stick2.getRawButton(2):
+            self.dump.loader()
 
         wpilib.Timer.delay (0.005) #wait for the motor to update
 
