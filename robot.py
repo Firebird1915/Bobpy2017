@@ -37,13 +37,13 @@ class Bob(MagicRobot):
         self.sd = wpilib.SmartDashboard
 
         #Motors and such are set here
-        self.rf_motor = ctre.CANTalon(5)#5
-        self.rr_motor = ctre.CANTalon(6)#6
-        self.lf_motor = ctre.CANTalon(2)#2
-        self.lr_motor = ctre.CANTalon(1)
+        self.rf_motor = ctre.CANTalon(3)#5
+        self.rr_motor = ctre.CANTalon(4)#6
+        self.lf_motor = ctre.CANTalon(1)#2
+        self.lr_motor = ctre.CANTalon(5)
 
         #Lift
-        self.lift_motor = ctre.CANTalon(3)
+        self.lift_motor = ctre.CANTalon(12)
 
 
         self.robotDrive = wpilib.RobotDrive(self.rf_motor,
@@ -146,6 +146,17 @@ class Bob(MagicRobot):
         ////logitech Controls////
         """
         self.lift.goUp(self.stick2.getRawAxis(1))
+
+        if self.stick.getRawButton(6):
+            try:
+                origin_yaw = self.navX.getYaw()
+                while not (self.navX.getYaw() >= origin_yaw + 56) and not(self.navX.getYaw() <= origin_yaw-56):
+                    self.drive.arcade(0, .5)
+                    if self.stick.getRawButton(5):
+                        break
+            except:
+                if not self.isFmsAttached():
+                    raise
 
         if self.stick2.getRawButton(1):
             self.dump.dumper()
